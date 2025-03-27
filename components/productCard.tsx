@@ -12,12 +12,11 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ProductCardProps } from "@/types/types";
 
-
-const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : ProductCardProps) => {
+const ProductCard = ({ id, name, weight, price, quantity,  imgURL = 'https://picsum.photos/200/300'  } : ProductCardProps) => {
 //   const dispatch = useDispatch();
 //   const { items } = useSelector((state) => state.cart);
 //   const existingItem = items.find((item) => item.id === id);
-  const quantity = 0;
+  const quantityItems = 0;
 
   return (
     <View style={styles.card}>
@@ -35,7 +34,7 @@ const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : Produc
         <Text style={styles.weight}>{weight} г</Text>
         <Text style={styles.price}>{price} ₽</Text>
 
-        {quantity > 0 ? (
+        {quantityItems > 0 ? (
           <View style={styles.quantityControls}>
             <TouchableOpacity
               style={styles.controlButton}
@@ -43,14 +42,14 @@ const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : Produc
             //     dispatch(removeFromCart({ id, name, quantity, price }))
             //   }
             >
-              {quantity > 1 ? (
+              {quantityItems > 1 ? (
                 <Ionicons name="remove" size={24} color="#0396BF" />
               ) : (
                 <Ionicons name="trash-outline" size={24} color="#0396BF" />
               )}
             </TouchableOpacity>
 
-            <Text style={styles.quantityText}>{quantity}</Text>
+            <Text style={styles.quantityText}>{quantityItems}</Text>
 
             <TouchableOpacity
               style={styles.controlButton}
@@ -59,14 +58,14 @@ const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : Produc
             //       dispatch(addToCart({ id, name, quantity: 1, price }));
             //     }
             //   }}
-              disabled={quantity === totalQuantity}
+              disabled={quantity === quantityItems}
             >
               <Ionicons name="add" size={24} color="#0396BF" />
             </TouchableOpacity>
           </View>
         ) : (
           <TouchableOpacity
-            style={[styles.addButton, !totalQuantity && styles.disabledButton]}
+            style={[styles.addButton, !quantity && styles.disabledButton]}
             // onPress={() => {
             //   if (totalQuantity) {
             //     dispatch(
@@ -74,7 +73,7 @@ const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : Produc
             //     );
             //   }
             // }}
-            disabled={!totalQuantity}
+            disabled={!quantity}
           >
             <Ionicons name="cart-outline" size={20} color="white" />
             <Text style={styles.addButtonText}>В корзину</Text>
@@ -82,8 +81,8 @@ const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : Produc
         )}
 
         <View style={styles.stockInfo}>
-          {totalQuantity > 0 ? (
-            <Text style={styles.inStock}>В наличии {totalQuantity} шт</Text>
+          {quantity > 0 ? (
+            <Text style={styles.inStock}>В наличии {quantity} шт</Text>
           ) : (
             <Text style={styles.outOfStock}>Нет в наличии</Text>
           )}

@@ -1,10 +1,9 @@
 export type ProductCardProps = {
-  quantity: number;
   id: number;
   name: string;
   weight: number;
   price: number;
-  totalQuantity: number;
+  quantity: number;
   imgURL: string;
 };
 
