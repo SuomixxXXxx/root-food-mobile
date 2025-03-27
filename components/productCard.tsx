@@ -10,6 +10,7 @@ import {
 // import { useDispatch, useSelector } from "react-redux";
 // import { addToCart, removeFromCart } from "../redux/slices/cart";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { ProductCardProps } from "@/types/types";
 
 
 const ProductCard = ({ id, name, weight, price, totalQuantity, imgURL } : ProductCardProps) => {

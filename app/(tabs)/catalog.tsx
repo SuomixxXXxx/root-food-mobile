@@ -1,5 +1,11 @@
+import { fetchDishItems } from "@/api/slices/dishItem";
+import { RootState } from "@/api/store";
 import ProductCard from "@/components/productCard";
+import { useAppDispatch } from "@/hooks/hooks";
+import { ProductCardProps } from "@/types/types";
+import { useEffect } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const products: ProductCardProps[] = [
   {
@@ -68,6 +74,14 @@ const products: ProductCardProps[] = [
   },
 ];
 export default function CatalogScreen() {
+  const dispatch = useAppDispatch();
+  const categoryDishes = useSelector<RootState, ProductCardProps[]>(
+    (state) => state.dishItems.dishItems.data || []
+  );
+  useEffect(() => {
+    dispatch(fetchDishItems());
+  }, [dispatch]);
+  console.log(categoryDishes);
   return (
     <View style={styles.container}>
       <FlatList
