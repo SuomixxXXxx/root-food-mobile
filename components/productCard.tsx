@@ -6,13 +6,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  ImageErrorEventData,
 } from "react-native";
 // import { useDispatch, useSelector } from "react-redux";
 // import { addToCart, removeFromCart } from "../redux/slices/cart";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ProductCardProps } from "@/types/types";
 
-const ProductCard = ({ id, name, weight, price, quantity,  imgURL = 'https://picsum.photos/200/300'  } : ProductCardProps) => {
+const ProductCard = ({ id, name, weight, price, quantity,  imgURL= "https://img-fotki.yandex.ru/get/5631/255450643.c/0_18180e_bd9ed72e_orig"  } : ProductCardProps) => {
 //   const dispatch = useDispatch();
 //   const { items } = useSelector((state) => state.cart);
 //   const existingItem = items.find((item) => item.id === id);
@@ -23,7 +24,7 @@ const ProductCard = ({ id, name, weight, price, quantity,  imgURL = 'https://pic
       <Image
         source={{ uri: imgURL }}
         style={styles.cardImage}
-        onError={() => console.log("Image load error")}
+        onError={(error) => console.log(error.nativeEvent.error)}
         resizeMode="cover"
       />
 
