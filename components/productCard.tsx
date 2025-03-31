@@ -12,12 +12,24 @@ import {
 // import { addToCart, removeFromCart } from "../redux/slices/cart";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { ProductCardProps } from "@/types/types";
+import { useAppDispatch } from "@/hooks/hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "@/api/store";
+import { addToCart, removeFromCart } from "@/api/slices/cart";
 
-const ProductCard = ({ id, name, weight, price, quantity,  imgURL= "https://img-fotki.yandex.ru/get/5631/255450643.c/0_18180e_bd9ed72e_orig"  } : ProductCardProps) => {
-//   const dispatch = useDispatch();
-//   const { items } = useSelector((state) => state.cart);
-//   const existingItem = items.find((item) => item.id === id);
-  const quantityItems = 0;
+const ProductCard = ({
+  id,
+  name,
+  weight,
+  price,
+  quantity,
+  imgURL = "https://img-fotki.yandex.ru/get/5631/255450643.c/0_18180e_bd9ed72e_orig",
+}: ProductCardProps) => {
+  const dispatch = useAppDispatch();
+  const { items } = useSelector((state: RootState) => state.cart);
+  const existingItem = items.find((item) => item.id === id);
+  const quantityItems = existingItem ? existingItem.quantity : 0;
+  // const quantityItems = 0;
 
   return (
     <View style={styles.card}>
@@ -39,9 +51,9 @@ const ProductCard = ({ id, name, weight, price, quantity,  imgURL= "https://img-
           <View style={styles.quantityControls}>
             <TouchableOpacity
               style={styles.controlButton}
-            //   onPress={() =>
-            //     dispatch(removeFromCart({ id, name, quantity, price }))
-            //   }
+                onPress={() =>
+                  dispatch(removeFromCart({ id, name, quantity, price }))
+                }
             >
               {quantityItems > 1 ? (
                 <Ionicons name="remove" size={24} color="#0396BF" />
@@ -54,11 +66,11 @@ const ProductCard = ({ id, name, weight, price, quantity,  imgURL= "https://img-
 
             <TouchableOpacity
               style={styles.controlButton}
-            //   onPress={() => {
-            //     if (quantity < totalQuantity) {
-            //       dispatch(addToCart({ id, name, quantity: 1, price }));
-            //     }
-            //   }}
+                onPress={() => {
+                  if (quantityItems < quantity) {
+                    dispatch(addToCart({ id, name, quantity: 1, price }));
+                  }
+                }}
               disabled={quantity === quantityItems}
             >
               <Ionicons name="add" size={24} color="#0396BF" />
@@ -67,13 +79,13 @@ const ProductCard = ({ id, name, weight, price, quantity,  imgURL= "https://img-
         ) : (
           <TouchableOpacity
             style={[styles.addButton, !quantity && styles.disabledButton]}
-            // onPress={() => {
-            //   if (totalQuantity) {
-            //     dispatch(
-            //       addToCart({ id, name, quantity: 1, price, totalQuantity })
-            //     );
-            //   }
-            // }}
+            onPress={() => {
+              if (quantity) {
+                dispatch(
+                  addToCart({ id, name, quantity: 1, price })
+                );
+              }
+            }}
             disabled={!quantity}
           >
             <Ionicons name="cart-outline" size={20} color="white" />

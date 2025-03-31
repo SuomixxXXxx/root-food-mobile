@@ -1,8 +1,8 @@
 export type ProductCardProps = {
-  categoryDTO:{
+  categoryDTO: {
     id: number;
     name: string;
-  }
+  };
   id: number;
   name: string;
   weight: number;
@@ -27,4 +27,19 @@ export interface CategoriesState {
     data: CategoryProps[] | null;
     status: string;
   };
+}
+
+export type CartItem = {
+  id: number;
+  name: string;
+  price: number;
+  unitPrice: number;
+  quantity: number;
+};
+
+export interface CartState {
+  items: CartItem[];
+  amount: number;
+  totalPrice: number;
+  status: string;
 }
