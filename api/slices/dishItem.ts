@@ -14,6 +14,21 @@ export const fetchDishItems = createAsyncThunk(
   }
 );
 
+export const fetchDishItemsByCategory = createAsyncThunk(
+  "dishItems/getByCategory?",
+  async (categoryId: number) => {
+    try {
+      const response = await axios.get(
+        `dishItems/getByCategory?categoryId=${categoryId}`
+      );
+      console.log(response.data);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 const initialState: DishItemsState = {
   dishItems: {
     data: null,
@@ -39,8 +54,19 @@ const dishItemSlice = createSlice({
         state.dishItems.data = [];
         state.dishItems.status = STATUS.REJECTED;
       })
+      .addCase(fetchDishItemsByCategory.pending, (state) => {
+        state.dishItems.data = [];
+        state.dishItems.status = STATUS.PENDING;
+      })
+      .addCase(fetchDishItemsByCategory.fulfilled, (state, action) => {
+        state.dishItems.data = action.payload?.data;
+        state.dishItems.status = STATUS.FULFILLED;
+      })
+      .addCase(fetchDishItemsByCategory.rejected, (state) => {
+        state.dishItems.data = [];
+        state.dishItems.status = STATUS.REJECTED;
+      });
   },
 });
-
 
 export const dishItemReducer = dishItemSlice.reducer;
