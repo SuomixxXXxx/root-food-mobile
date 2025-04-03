@@ -1,20 +1,26 @@
-import { STATUS } from "@/constants/constants";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "../api";
-import { CartState } from "@/types/types";
+import { STATUS } from "@/constants/constants";
+import {
+  AddToCartPayload,
+  CartState,
+  RemoveFromCartPayload,
+} from "@/types/types";
 
-
-
-export const orderCreate = createAsyncThunk("/order/create", async (params) => {
-  try {
-    const response = await axios.post(`order/create`, params);
-    console.log(response, "returned value");
-    return response;
-  } catch (error) {
-    //   alert(error.response.data.message);
-    console.log(error);
+export const orderCreate = createAsyncThunk(
+  "/order/create",
+  async (params: {
+    orderContentDTOs: Array<{ dishItemDTO: { id: number }; quantity: number }>;
+  }) => {
+    try {
+      const response = await axios.post("order/create", params);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
-});
+);
 
 const initialState: CartState = {
   items: [],
@@ -27,54 +33,47 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (
-      state,
-      action: PayloadAction<{
-        id: number;
-        name: string;
-        quantity: number;
-        price: number;
-      }>
-    ) => {
+    addToCart: (state, action: PayloadAction<AddToCartPayload>) => {
       const existingItem = state.items.find(
-        (item) => item.name === action.payload.name
+        (item) => item.id === action.payload.id
       );
+      const availableQuantity = action.payload.totalQuantity;
+
       if (existingItem) {
-        existingItem.quantity += 1;
-        existingItem.price += action.payload.price;
+        if (existingItem.quantity < existingItem.totalQuantity) {
+          existingItem.quantity += 1;
+          existingItem.price = existingItem.unitPrice * existingItem.quantity;
+          state.amount += 1;
+          state.totalPrice += existingItem.unitPrice;
+        }
       } else {
         state.items.push({
           ...action.payload,
           unitPrice: action.payload.price,
+          price: action.payload.price * 1,
+          quantity: 1,
+          totalQuantity: availableQuantity,
         });
+        state.amount += 1;
+        state.totalPrice += action.payload.price;
       }
-      state.amount += 1;
-      state.totalPrice += action.payload.price;
     },
-    removeFromCart: (
-      state,
-      action: PayloadAction<{
-        id: number;
-        name: string;
-        quantity: number;
-        price: number;
-      }>
-    ) => {
+    removeFromCart: (state, action: PayloadAction<RemoveFromCartPayload>) => {
       const existingItem = state.items.find(
-        (item) => item.name === action.payload.name
+        (item) => item.id === action.payload.id
       );
-      if (existingItem && existingItem.quantity > 1) {
+      if (!existingItem) return;
+
+      if (existingItem.quantity > 1) {
         existingItem.quantity -= 1;
         existingItem.price -= existingItem.unitPrice;
       } else {
         state.items = state.items.filter(
-          (item) => item.name !== action.payload.name
+          (item) => item.id !== action.payload.id
         );
       }
-      if (existingItem) {
-        state.amount -= 1;
-        state.totalPrice -= existingItem.unitPrice;
-      }
+      state.amount -= 1;
+      state.totalPrice -= existingItem.unitPrice;
     },
     clearCart: (state) => {
       state.items = [];
@@ -89,6 +88,9 @@ const cartSlice = createSlice({
       })
       .addCase(orderCreate.fulfilled, (state) => {
         state.status = STATUS.FULFILLED;
+        state.items = [];
+        state.amount = 0;
+        state.totalPrice = 0;
       })
       .addCase(orderCreate.rejected, (state) => {
         state.status = STATUS.REJECTED;

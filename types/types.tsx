@@ -35,6 +35,7 @@ export type CartItem = {
   price: number;
   unitPrice: number;
   quantity: number;
+  totalQuantity: number;
 };
 
 export interface CartState {
@@ -43,3 +44,21 @@ export interface CartState {
   totalPrice: number;
   status: string;
 }
+
+export type CartItemPayload = {
+  id: number;
+  name: string;
+  price: number;
+  totalQuantity: number;
+};
+
+export type RemoveFromCartPayload = {
+  id: number;
+};
+
+export type AddToCartPayload = {
+  id: number;
+  name: string;
+  price: number;
+  totalQuantity: number;
+};

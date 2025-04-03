@@ -52,14 +52,12 @@ const ProductCard = ({
           <View style={styles.quantityControls}>
             <TouchableOpacity
               style={styles.controlButton}
-              onPress={() =>
-                dispatch(removeFromCart({ id, name, quantity, price }))
-              }
+              onPress={() => dispatch(removeFromCart({ id }))}
             >
               {quantityItems > 1 ? (
-                <Ionicons name="remove" size={24} color="#0396BF" />
+                <Ionicons name="remove" size={20} color="#0396BF" />
               ) : (
-                <Ionicons name="trash-outline" size={24} color="#0396BF" />
+                <Ionicons name="trash-outline" size={20} color="#0396BF" />
               )}
             </TouchableOpacity>
 
@@ -69,12 +67,19 @@ const ProductCard = ({
               style={styles.controlButton}
               onPress={() => {
                 if (quantityItems < quantity) {
-                  dispatch(addToCart({ id, name, quantity: 1, price }));
+                  dispatch(
+                    addToCart({
+                      id,
+                      name,
+                      price: price,
+                      totalQuantity: quantity,
+                    })
+                  );
                 }
               }}
               disabled={quantity === quantityItems}
             >
-              <Ionicons name="add" size={24} color="#0396BF" />
+              <Ionicons name="add" size={20} color="#0396BF" />
             </TouchableOpacity>
           </View>
         ) : (
@@ -82,7 +87,14 @@ const ProductCard = ({
             style={[styles.addButton, !quantity && styles.disabledButton]}
             onPress={() => {
               if (quantity) {
-                dispatch(addToCart({ id, name, quantity: 1, price }));
+                dispatch(
+                  addToCart({
+                    id,
+                    name,
+                    price: price,
+                    totalQuantity: quantity,
+                  })
+                );
               }
             }}
             disabled={!quantity}
@@ -146,7 +158,7 @@ const styles = StyleSheet.create({
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
-    height: 48,
+    height: 56,
     justifyContent: "space-between",
     marginVertical: 12,
     borderWidth: 1,
@@ -163,7 +175,7 @@ const styles = StyleSheet.create({
     color: "#0396BF",
   },
   addButton: {
-    height: 48,
+    height: 56,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

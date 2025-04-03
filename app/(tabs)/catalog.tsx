@@ -80,16 +80,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: "auto",
+    backgroundColor: "#F0F8FF",
   },
   list: {
     paddingTop: 40,
     paddingBottom: 90,
   },
-  categoryContainer: {},
+  categoryContainer: {
+    paddingTop: 40,
+    // paddingHorizontal: 18
+  },
   categoryTitle: {
     fontSize: 20,
     fontWeight: "bold",
     paddingVertical: 10,
+    paddingHorizontal: 10,
     textTransform: "capitalize",
   },
   noProducts: {
