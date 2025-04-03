@@ -16,6 +16,7 @@ import { useAppDispatch } from "@/hooks/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "@/api/store";
 import { addToCart, removeFromCart } from "@/api/slices/cart";
+import { IMAGE_URL } from "@/constants/constants";
 
 const ProductCard = ({
   id,
@@ -23,7 +24,7 @@ const ProductCard = ({
   weight,
   price,
   quantity,
-  imgURL = "https://img-fotki.yandex.ru/get/5631/255450643.c/0_18180e_bd9ed72e_orig",
+  imgURL = `${IMAGE_URL}/${id}.jpg`,
 }: ProductCardProps) => {
   const dispatch = useAppDispatch();
   const { items } = useSelector((state: RootState) => state.cart);
@@ -51,9 +52,9 @@ const ProductCard = ({
           <View style={styles.quantityControls}>
             <TouchableOpacity
               style={styles.controlButton}
-                onPress={() =>
-                  dispatch(removeFromCart({ id, name, quantity, price }))
-                }
+              onPress={() =>
+                dispatch(removeFromCart({ id, name, quantity, price }))
+              }
             >
               {quantityItems > 1 ? (
                 <Ionicons name="remove" size={24} color="#0396BF" />
@@ -66,11 +67,11 @@ const ProductCard = ({
 
             <TouchableOpacity
               style={styles.controlButton}
-                onPress={() => {
-                  if (quantityItems < quantity) {
-                    dispatch(addToCart({ id, name, quantity: 1, price }));
-                  }
-                }}
+              onPress={() => {
+                if (quantityItems < quantity) {
+                  dispatch(addToCart({ id, name, quantity: 1, price }));
+                }
+              }}
               disabled={quantity === quantityItems}
             >
               <Ionicons name="add" size={24} color="#0396BF" />
@@ -81,9 +82,7 @@ const ProductCard = ({
             style={[styles.addButton, !quantity && styles.disabledButton]}
             onPress={() => {
               if (quantity) {
-                dispatch(
-                  addToCart({ id, name, quantity: 1, price })
-                );
+                dispatch(addToCart({ id, name, quantity: 1, price }));
               }
             }}
             disabled={!quantity}
@@ -147,6 +146,7 @@ const styles = StyleSheet.create({
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
+    height: 48,
     justifyContent: "space-between",
     marginVertical: 12,
     borderWidth: 1,
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     color: "#0396BF",
   },
   addButton: {
+    height: 48,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
