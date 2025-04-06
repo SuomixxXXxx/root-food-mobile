@@ -81,13 +81,14 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: "auto",
     backgroundColor: "#F0F8FF",
+    paddingBottom: 90,
   },
   list: {
     paddingTop: 40,
     paddingBottom: 90,
   },
   categoryContainer: {
-    paddingTop: 40,
+    paddingTop: 30,
     // paddingHorizontal: 18
   },
   categoryTitle: {

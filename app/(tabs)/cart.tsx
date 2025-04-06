@@ -235,13 +235,13 @@ const styles = StyleSheet.create({
     borderColor: "#0396BF",
     borderRadius: 8,
     marginBottom: 8,
-    width: 120, // Фиксированная ширина
+    width: 120,
     justifyContent: "space-between",
   },
   controlButton: {
     padding: 8,
-    width: 40, // Фиксированная ширина кнопок
-    alignItems: "center", //
+    width: 40,
+    alignItems: "center",
   },
   quantityText: {
     fontSize: 16,

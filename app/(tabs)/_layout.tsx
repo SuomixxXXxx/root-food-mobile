@@ -14,7 +14,7 @@ export default function TabLayout() {
           bottom: 20,
           left: 0,
           right: 0,
-          marginHorizontal: 20, 
+          marginHorizontal: 20,
           borderRadius: 20,
           height: 70,
           elevation: 10,
@@ -25,7 +25,6 @@ export default function TabLayout() {
           },
           shadowOpacity: 0.1,
           shadowRadius: 10,
-          
         },
         tabBarItemStyle: {
           justifyContent: "center",
@@ -38,7 +37,6 @@ export default function TabLayout() {
           marginTop: -4,
           marginBottom: 4,
         },
-        
       }}
     >
       <Tabs.Screen

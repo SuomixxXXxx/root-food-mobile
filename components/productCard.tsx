@@ -122,10 +122,10 @@ const styles = StyleSheet.create({
     width: 160,
     borderRadius: 16,
     margin: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: "#7A9E9F",
+    shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 0,
     elevation: 3,
   },
   cardImage: {
@@ -140,10 +140,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "600",
+    textTransform: "capitalize",
     marginBottom: 4,
   },
   weight: {
     fontSize: 12,
+    fontWeight: "600",
     color: "gray",
     marginBottom: 4,
   },
@@ -158,31 +160,31 @@ const styles = StyleSheet.create({
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
-    height: 56,
+    height: 40,
     justifyContent: "space-between",
-    marginVertical: 12,
+    marginVertical: 8,
     borderWidth: 1,
     borderColor: "#0396BF",
     borderRadius: 8,
-    padding: 8,
+    padding: 4,
   },
   controlButton: {
-    padding: 8,
+    padding: 4,
   },
   quantityText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#0396BF",
   },
   addButton: {
-    height: 56,
+    height: 40,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#0396BF",
     borderRadius: 8,
-    padding: 12,
-    marginVertical: 12,
+    padding: 8,
+    marginVertical: 8,
   },
   addButtonText: {
     color: "white",
@@ -199,10 +201,12 @@ const styles = StyleSheet.create({
   inStock: {
     color: "#166534",
     fontSize: 12,
+    fontWeight: "600",
   },
   outOfStock: {
-    color: "#dc2626",
+    color: "#BF0306",
     fontSize: 12,
+    fontWeight: "600",
   },
 });
 
