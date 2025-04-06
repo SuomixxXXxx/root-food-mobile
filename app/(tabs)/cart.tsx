@@ -63,9 +63,9 @@ const CartScreen = (
             style={styles.controlButton}
           >
             {item.quantity > 1 ? (
-              <Icon name="remove" size={24} color="#0396BF" />
+              <Icon name="remove" size={20} color="#0396BF" />
             ) : (
-              <Icon name="trash-outline" size={24} color="#0396BF" />
+              <Icon name="trash-outline" size={20} color="#0396BF" />
             )}
           </TouchableOpacity>
           <Text style={styles.quantityText}>{item.quantity}</Text>
@@ -85,7 +85,7 @@ const CartScreen = (
           >
             <Icon
               name="add"
-              size={24}
+              size={20}
               color={
                 item.quantity >= item.totalQuantity ? "#CCCCCC" : "#0396BF"
               }
@@ -188,6 +188,7 @@ const styles = StyleSheet.create({
   clearButtonText: {
     color: "#666",
     fontSize: 16,
+    fontWeight: "500",
     marginRight: 8,
   },
   listContent: {
@@ -199,10 +200,10 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     backgroundColor: "white",
     borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: "#7A9E9F",
+    shadowOffset: { width: 2, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 0,
     elevation: 3,
   },
   itemImage: {
@@ -223,7 +224,8 @@ const styles = StyleSheet.create({
   },
   itemPrice: {
     fontSize: 14,
-    color: "#666",
+    fontWeight: "500",
+    color: "gray",
   },
   controlsContainer: {
     alignItems: "flex-end",
@@ -231,28 +233,31 @@ const styles = StyleSheet.create({
   quantityControls: {
     flexDirection: "row",
     alignItems: "center",
+    height: 40,
+    justifyContent: "space-between",
     borderWidth: 1,
     borderColor: "#0396BF",
     borderRadius: 8,
-    marginBottom: 8,
+    padding: 4,
     width: 120,
-    justifyContent: "space-between",
   },
   controlButton: {
-    padding: 8,
-    width: 40,
+    padding: 4,
+    width: 32,
     alignItems: "center",
+    justifyContent: "center",
   },
   quantityText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     color: "#0396BF",
-    marginHorizontal: 12,
+    marginHorizontal: 16,
   },
   totalItemPrice: {
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
+    marginTop: 8,
   },
   paymentContainer: {
     paddingBottom: 100,
@@ -269,6 +274,7 @@ const styles = StyleSheet.create({
   },
   paymentMethod: {
     fontSize: 16,
+    fontWeight: "500",
     color: "#666",
     marginBottom: 16,
   },
@@ -279,6 +285,7 @@ const styles = StyleSheet.create({
   },
   totalText: {
     fontSize: 18,
+    fontWeight: "500",
     color: "#333",
   },
   totalPrice: {
