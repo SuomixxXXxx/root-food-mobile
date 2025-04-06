@@ -35,7 +35,7 @@ const ProductCard = ({
   return (
     <View style={styles.card}>
       <Image
-        source={{ uri: imgURL }}
+        source={{ uri: imgURL}}
         style={styles.cardImage}
         onError={(error) => console.log(error.nativeEvent.error)}
         resizeMode="cover"

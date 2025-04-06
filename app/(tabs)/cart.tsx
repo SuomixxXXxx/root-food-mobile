@@ -16,6 +16,7 @@ import { removeFromCart, addToCart, clearCart } from "@/api/slices/cart";
 import { IMAGE_URL } from "@/constants/constants";
 import { CartItem } from "@/types/types";
 import { useAppDispatch } from "@/hooks/hooks";
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get("window");
 
@@ -23,7 +24,9 @@ const CartScreen = (
   {
     //  navigation
   }
+  
 ) => {
+  const router = useRouter();
   const { items, amount, totalPrice } = useSelector(
     (state: RootState) => state.cart
   );
@@ -37,7 +40,7 @@ const CartScreen = (
         <Text style={styles.emptyTitle}>Корзина ждет пока её наполнят...</Text>
         <TouchableOpacity
           style={styles.catalogButton}
-          // onPress={() => navigation.navigate('Category')}
+          onPress={() => router.push('/(tabs)/catalog')}
         >
           <Text style={styles.buttonText}>В каталог</Text>
         </TouchableOpacity>
