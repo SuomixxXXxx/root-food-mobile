@@ -4,17 +4,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { dishItemReducer } from "./slices/dishItem";
 import { categoriesReducer } from "./slices/categories";
 import { cartReducer } from "./slices/cart";
+import { authReducer } from "./slices/auth";
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["dishItems", "cart"],
+  whitelist: ["dishItems", "cart", "auth"],
 };
 
 const rootReducer = combineReducers({
   dishItems: dishItemReducer,
   categories: categoriesReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  auth: authReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

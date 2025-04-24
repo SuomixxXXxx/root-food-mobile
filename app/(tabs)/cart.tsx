@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -12,11 +12,12 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
 import { RootState } from "@/api/store";
-import { removeFromCart, addToCart, clearCart } from "@/api/slices/cart";
+import { removeFromCart, addToCart, clearCart, orderCreate } from "@/api/slices/cart";
 import { IMAGE_URL } from "@/constants/constants";
 import { CartItem } from "@/types/types";
-import { useAppDispatch } from "@/hooks/hooks";
-import { useRouter } from 'expo-router';
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { useRouter } from "expo-router";
+import { selectIsAuth } from "@/api/slices/auth";
 
 const { width } = Dimensions.get("window");
 
@@ -24,15 +25,63 @@ const CartScreen = (
   {
     //  navigation
   }
-  
 ) => {
   const router = useRouter();
   const { items, amount, totalPrice } = useSelector(
     (state: RootState) => state.cart
   );
   const dispatch = useAppDispatch();
-  // const existingItem = items.find((item) => item.id === id);
-  // const quantityItems = existingItem ? existingItem.quantity : 0;
+  const isAuth = useAppSelector(selectIsAuth);
+  const [open, setOpen] = useState(false);
+  const [orderMessage, setOrderMessage] = useState("");
+  const handleClose = async () => {
+    setOpen(false);
+    setOrderMessage("");
+    dispatch(clearCart());
+  };
+
+  const handlePurchase = async () => {
+    if (!isAuth) {
+      setOpen(true);
+      setOrderMessage("Пожалуйста, авторизуйтесь для оформления заказа");
+      return;
+    }
+  
+    // Проверка наличия товаров
+    if (items.length === 0) {
+      setOpen(true);
+      setOrderMessage("Корзина пуста");
+      return;
+    }
+  
+    // Подготовка данных
+    const orderContentDTOs = items.map(item => ({
+      dishItemDTO: { id: item.id },
+      quantity: item.quantity
+    }));
+  
+    try {
+      console.log('Отправка заказа:', { orderContentDTOs }); // Логирование
+      
+      const action = await dispatch(orderCreate({ orderContentDTOs }));
+      
+      if (orderCreate.fulfilled.match(action)) {
+        setOrderMessage(`Заказ #${action.payload.id} успешно оформлен!`);
+        setOpen(true);
+        dispatch(clearCart());
+      } else {
+        throw new Error(action.payload as string || 'Неизвестная ошибка');
+      }
+    } catch (error: any) {
+      console.error('Ошибка заказа:', error);
+      setOrderMessage(
+        error.response?.data?.message || 
+        error.message || 
+        "Ошибка при оформлении заказа. Пожалуйста, попробуйте снова."
+      );
+      setOpen(true);
+    }
+  };
 
   if (amount === 0) {
     return (
@@ -40,7 +89,7 @@ const CartScreen = (
         <Text style={styles.emptyTitle}>Корзина ждет пока её наполнят...</Text>
         <TouchableOpacity
           style={styles.catalogButton}
-          onPress={() => router.push('/(tabs)/catalog')}
+          onPress={() => router.push("/(tabs)/catalog")}
         >
           <Text style={styles.buttonText}>В каталог</Text>
         </TouchableOpacity>
@@ -127,10 +176,7 @@ const CartScreen = (
           <Text style={styles.totalText}>Итого:</Text>
           <Text style={styles.totalPrice}>{totalPrice} ₽</Text>
         </View>
-        <TouchableOpacity
-          style={styles.payButton}
-          // onPress={handlePurchase}
-        >
+        <TouchableOpacity style={styles.payButton} onPress={handlePurchase}>
           <Text style={styles.payButtonText}>Оплатить</Text>
         </TouchableOpacity>
       </View>
@@ -148,7 +194,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-   
+
     padding: 20,
     backgroundColor: "#F0F8FF",
   },

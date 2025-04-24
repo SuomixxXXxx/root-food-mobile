@@ -6,18 +6,25 @@ import {
   CartState,
   RemoveFromCartPayload,
 } from "@/types/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const orderCreate = createAsyncThunk(
-  "/order/create",
-  async (params: {
-    orderContentDTOs: Array<{ dishItemDTO: { id: number }; quantity: number }>;
-  }) => {
+  'cart/orderCreate',
+  async (params: { orderContentDTOs: Array<{ dishItemDTO: { id: number }; quantity: number }> }, thunkAPI) => {
     try {
-      const response = await axios.post("order/create", params);
+      const response = await axios.post('/order/create', {
+        orderContentDTOs: params.orderContentDTOs
+      }, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
       return response.data;
-    } catch (error) {
-      console.error(error);
-      throw error;
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        await AsyncStorage.multiRemove(['token', 'refreshToken']);
+      }
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'Ошибка сервера');
     }
   }
 );
