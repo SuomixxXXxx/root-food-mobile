@@ -12,7 +12,12 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
 import { RootState } from "@/api/store";
-import { removeFromCart, addToCart, clearCart, orderCreate } from "@/api/slices/cart";
+import {
+  removeFromCart,
+  addToCart,
+  clearCart,
+  orderCreate,
+} from "@/api/slices/cart";
 import { IMAGE_URL } from "@/constants/constants";
 import { CartItem } from "@/types/types";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
@@ -46,38 +51,36 @@ const CartScreen = (
       setOrderMessage("Пожалуйста, авторизуйтесь для оформления заказа");
       return;
     }
-  
-    // Проверка наличия товаров
+
     if (items.length === 0) {
       setOpen(true);
       setOrderMessage("Корзина пуста");
       return;
     }
-  
-    // Подготовка данных
-    const orderContentDTOs = items.map(item => ({
+
+    const orderContentDTOs = items.map((item) => ({
       dishItemDTO: { id: item.id },
-      quantity: item.quantity
+      quantity: item.quantity,
     }));
-  
+
     try {
-      console.log('Отправка заказа:', { orderContentDTOs }); // Логирование
-      
+      console.log("Отправка заказа:", { orderContentDTOs }); 
+
       const action = await dispatch(orderCreate({ orderContentDTOs }));
-      
+
       if (orderCreate.fulfilled.match(action)) {
         setOrderMessage(`Заказ #${action.payload.id} успешно оформлен!`);
         setOpen(true);
         dispatch(clearCart());
       } else {
-        throw new Error(action.payload as string || 'Неизвестная ошибка');
+        throw new Error((action.payload as string) || "Неизвестная ошибка");
       }
     } catch (error: any) {
-      console.error('Ошибка заказа:', error);
+      console.error("Ошибка заказа:", error);
       setOrderMessage(
-        error.response?.data?.message || 
-        error.message || 
-        "Ошибка при оформлении заказа. Пожалуйста, попробуйте снова."
+        error.response?.data?.message ||
+          error.message ||
+          "Ошибка при оформлении заказа. Пожалуйста, попробуйте снова."
       );
       setOpen(true);
     }
@@ -93,6 +96,9 @@ const CartScreen = (
         >
           <Text style={styles.buttonText}>В каталог</Text>
         </TouchableOpacity>
+        {orderMessage ? (
+          <Text style={styles.orderMessage}>{orderMessage}</Text>
+        ) : null}
       </View>
     );
   }
@@ -352,6 +358,13 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "600",
+  },
+  orderMessage: {
+    marginTop: 20,
+    color: "#2E7D32",
+    fontSize: 16,
+    textAlign: "center",
+    paddingHorizontal: 20,
   },
 });
 
